@@ -1,7 +1,11 @@
 import datetime
+import random
+
+from pptx import Presentation
 
 COMMANDS = ('add_network', 'n', 'add_cinema', 'add_hall', 'add_movie', 'check_movie', 'show_hall',
-            'help', 'exit', 'buy_ticket', 'c', 'h', 'm', 'cm', 'sh', 'bt', 'e')
+            'help', 'exit', 'buy_ticket', 'c', 'h', 'm', 'cm', 'sh', 'bt', 'e',
+            'create_prs', 'prs')
 
 cinemas = {}
 networks = {}
@@ -41,7 +45,7 @@ def check_hall(cinema, hall_number):
         assert int(hall_number) > 0
         return int(hall_number) - 1
     except Exception:
-        print(f'WARMING!! В кинотеатре "{cinema.name}" сети {cinema.network} такой зал отсутствует')
+        print(f'WARMING!! В кинотеатре "{cinema.name}" сети {cinema.network.name} такой зал отсутствует')
         return None
 
 
@@ -262,6 +266,25 @@ class Movie:
         print(f'Заказ № {len(self.orders)} принят!')
 
 
+def generate_pres(cinema, movie):
+    prs = Presentation()
+    # создаем новый слайд со схемой для добавления изображений
+    cinema = check_cinema(cinema)
+    slide = prs.slides.add_slide(prs.slide_layouts[8])
+    slide.shapes.title.text = f"В прокат вышел фильм '{movie}'! \n " \
+                              f"Смотрите только в Кинотеатре '{str(cinema.name)}'('{str(cinema.network.name)}')."
+    subtitle = slide.placeholders[1]
+    subtitle.text = "Тестовый текст"
+    # добавляем изображение
+    placeholder = slide.placeholders[1]
+    num = random.choice(range(1, 6))
+    placeholder.insert_picture(f'data/{num}.png')
+    # сохраняем презентацию
+    name = f'{movie}_prs.pptx'
+    prs.save(name)
+    return name
+
+
 def main():
     """Основной цикл программы"""
     comd = input('Введите команду\n')
@@ -337,6 +360,12 @@ def main():
             print('WARMING!! Данного фильма нет в прокате в данном зале')
             return True
         movie.buy_tickets()
+    elif comd[0] in ('create_prs', 'prs') and len(comd) == 1:
+        cinema, movie = input('Введите через пробел Кинотеатр и Фильм  ').split()
+        if check_cinema(cinema):
+            req = generate_pres(cinema, movie)
+
+            print(f'Рекламный буклет "{req}" создан')
 
     elif comd[0] == 'exit' and len(comd) == 1:
         return False

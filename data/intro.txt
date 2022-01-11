@@ -4,6 +4,7 @@
 2) add_cinema|c <network> <name>           -- добавить кинотеатр name в сеть network(новый_кинотеатр).
 3) add_hall|h <cinema>                     -- добавить зал, в к-театр cinema. Нумерация с 1.
 4) add_movie|m <cinema> <number>           -- добавить фильм в р-ние зала number в к-театре cinema.
+5) create_prs|prs                          -- Создать Афишу
 
 			Для покупателя:
 1) check_movie|cm <name>                   -- вывести список всех к-театров и залов, где есть места на фильм movie.
