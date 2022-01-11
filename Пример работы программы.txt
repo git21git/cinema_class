@@ -1,0 +1,14 @@
+n NWT
+c NWT KINOHALL_ONE
+h KINOHALL_ONE
+10 10
+m KINOHALL_ONE 1
+New_Film
+14 10
+15 40
+cm New_Film
+0
+bt KINOHALL_ONE 1 New_Film
+1
+5 6
+Ivan
