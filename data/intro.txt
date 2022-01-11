@@ -1,14 +1,14 @@
 ﻿							Список возможных команд:
 			Для собственника:
-1) add_network/n <name>                    -- добавить сеть кинотеатров с именем name(новая_сеть).
-2) add_cinema/c <network> <name>           -- добавить кинотеатр name в сеть network(новый_кинотеатр).
-3) add_hall/h <cinema>                     -- добавить зал, в к-театр cinema. Нумерация с 1.
-4) add_movie/m <cinema> <number>           -- добавить фильм в р-ние зала number в к-театре cinema.
+1) add_network|n <name>                    -- добавить сеть кинотеатров с именем name(новая_сеть).
+2) add_cinema|c <network> <name>           -- добавить кинотеатр name в сеть network(новый_кинотеатр).
+3) add_hall|h <cinema>                     -- добавить зал, в к-театр cinema. Нумерация с 1.
+4) add_movie|m <cinema> <number>           -- добавить фильм в р-ние зала number в к-театре cinema.
 
 			Для покупателя:
-1) check_movie/cm <name>                   -- вывести список всех к-театров и залов, где есть места.
-2) show_hall/sh <cinema> <number> <movie>  -- Схема зала к-театра cinemа в зале number на фильм movie.
-3) buy_ticket/bt <cinema> <number> <movie> -- купить билет на сеанс.
+1) check_movie|cm <name>                   -- вывести список всех к-театров и залов, где есть места на фильм movie.
+2) show_hall|sh <cinema> <number> <movie>  -- Схема зала к-театра cinemа в зале number на фильм movie.
+3) buy_ticket|bt <cinema> <number> <movie> -- купить билет на сеанс в cinema в зал number на movie.
 
 4) exit                                    -- выход.
 5) help                                    -- вывести список команд.
