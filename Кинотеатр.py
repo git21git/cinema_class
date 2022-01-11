@@ -90,7 +90,7 @@ class Cinema:
     """Класс Кинотеатра. Содержит информацию о своем названии, списке залов
         Имеет методы: Добавление залов, Вывод зала, Печать количества залов"""
 
-    def __init__(self, network, name):
+    def __init__(self, name, network):
         self.network = network
         self.name = name
         self.halls = []

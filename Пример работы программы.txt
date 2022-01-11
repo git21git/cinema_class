@@ -12,3 +12,4 @@ bt KINOHALL_ONE 1 New_Film
 1
 5 6
 Ivan
+exit
