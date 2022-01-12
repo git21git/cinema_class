@@ -1,0 +1,52 @@
+10 40
+h mir
+5 5
+m mir 1
+Снегурочка
+10 20
+12 40
+h Galaxy_Star
+15 10
+m mir 1
+Снегурочка
+15 30
+17 40
+h Yugra_cinema
+10 15
+m Yugra_cinema 1
+Путешествие
+18 20
+20 40
+cm Путешествие
+0
+bt Yugra_cinema 1 Путешествие
+1
+5 6
+Ivan
+n Syrgut
+c Syrgut Aura_Cinema
+c Syrgut Deco
+n Noyabrsk
+c Noyabrsk Cinema
+n Moscow
+c Moscow Crocus_Hall
+c Moscow AMedia
+c Moscow October
+c Moscow Pioneer
+c Moscow GUM
+c Moscow MosKino
+c Moscow Mirazh
+n Tyumen 
+c Tyumen Main
+c Tyumen Near
+n SPB
+c SPB Leningrad
+c SPB LenKino
+n Kaliningrad
+c Kaliningrad Seagrad
+prs
+mir Снегурочка
+cl
+cd
+help
+

@@ -1,11 +1,13 @@
 import datetime
 import random
 
+import xlsxwriter
+from docx import Document
 from pptx import Presentation
 
 COMMANDS = ('add_network', 'n', 'add_cinema', 'add_hall', 'add_movie', 'check_movie', 'show_hall',
             'help', 'exit', 'buy_ticket', 'c', 'h', 'm', 'cm', 'sh', 'bt', 'e',
-            'create_prs', 'prs')
+            'create_prs', 'prs', 'create_lst', 'cl', 'create_dia', 'cd')
 
 cinemas = {}
 networks = {}
@@ -120,7 +122,7 @@ class Cinema_Network():
     def __getitem__(self, item):
         return self.cinemas[item]
 
-    def add_hall(self, cinema):
+    def add_cinema(self, cinema):
         self.cinemas.append(cinema)
 
 
@@ -278,10 +280,50 @@ def generate_pres(cinema, movie):
     # добавляем изображение
     placeholder = slide.placeholders[1]
     num = random.choice(range(1, 6))
+    # Фон презентации всегда различный
     placeholder.insert_picture(f'data/{num}.png')
     # сохраняем презентацию
-    name = f'{movie}_prs.pptx'
+    name = f'Examples of work/{movie}_prs.pptx'
     prs.save(name)
+    return name
+
+
+def create_diagram():
+    """Создание круговой диаграммы: соотношение количества кинотеатров в сетях"""
+    name = 'Examples of work/networks_dia.xlsx'
+    workbook = xlsxwriter.Workbook(name)
+    worksheet = workbook.add_worksheet()
+    data = []
+    for net in networks.keys():
+        net = networks[net]
+        data.append((net.name, len(net.cinemas)))
+    for row, (item, price) in enumerate(data):
+        worksheet.write(row, 0, item)
+        worksheet.write(row, 1, price)
+
+    row += 1
+    worksheet.write(row, 0, 'Всего')
+    worksheet.write(row, 1, f'=SUM(B1:B{len(networks.keys())})')
+
+    chart = workbook.add_chart({'type': 'pie'})
+    chart.add_series({'categories': f'=Sheet1!$A$1:$A${len(networks.keys())}',
+                      'values': f'=Sheet1!$B$1:$B${len(networks.keys())}', })
+    worksheet.insert_chart('C3', chart)
+    workbook.close()
+    return name
+
+
+def create_doc():
+    """Создаем документ(список) всех кинотеатров сети"""
+    document = Document()
+    document.add_heading(f'Список всех сетей кинотеатров', 0)
+    for net in networks.keys():
+        net = check_network(net)
+        document.add_heading(f'Сеть кинотеатров "{net.name}"', level=1)
+        for cin in net.cinemas:
+            document.add_paragraph(f'{cin.name}', style='List Bullet')
+    name = f'Examples of work/networks_list.docx'
+    document.save(name)
     return name
 
 
@@ -302,7 +344,9 @@ def main():
             print(f'WARMING!! Кинотеатр с именем "{name}" уже существует')
             return True
         print(f'В сеть "{comd[1]}" добавлен кинотеатр "{name}"')
-        cinemas[name] = Cinema(name, nw)
+        new = Cinema(name, nw)
+        nw.add_cinema(new)
+        cinemas[name] = new
 
     elif comd[0] in ('add_network', 'n') and len(comd) == 2:
         name = comd[1]
@@ -360,11 +404,25 @@ def main():
             print('WARMING!! Данного фильма нет в прокате в данном зале')
             return True
         movie.buy_tickets()
+    elif comd[0] in ('create_dia', 'cd') and len(comd) == 1:
+        """создание диаграммы (Соотношение количества всех кинотеатров)"""
+        req = create_diagram()
+        if req:
+            print(f'Диаграмма "{req}" создан')
+        else:
+            print('Error!')
+    elif comd[0] in ('create_lst', 'cl') and len(comd) == 1:
+        """создание отчета (Списка всех кинотеатров)"""
+        req = create_doc()
+        if req:
+            print(f'Отчет "{req}" создан')
+        else:
+            print('Error!')
     elif comd[0] in ('create_prs', 'prs') and len(comd) == 1:
+        """создание презентации"""
         cinema, movie = input('Введите через пробел Кинотеатр и Фильм  ').split()
         if check_cinema(cinema):
             req = generate_pres(cinema, movie)
-
             print(f'Рекламный буклет "{req}" создан')
 
     elif comd[0] == 'exit' and len(comd) == 1:
@@ -377,8 +435,8 @@ def main():
 
 
 if __name__ == '__main__':
-    """Если наш знакомый откроет несколько сетей кинотеатров, 
-        ему будет полезна билетная система с возможностью работы в нескольких сетях))"""
+    """Если наш знакомый откроет кинотеатры 
+        в нескольких городах, будет удобно объединить их в сети по названию города))"""
     print('Вас приветствует Билетная система "Кино".')
     interface()
     while main():
